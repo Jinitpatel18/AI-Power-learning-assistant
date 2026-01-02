@@ -1,4 +1,4 @@
-import dotenv from'dotenv';
+import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express'
@@ -10,8 +10,8 @@ import errorHandler from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js'
 import documentRoutes from './routes/documentRoutes.js'
 import flashcardRoutes from './routes/flashcardRoutes.js'
-import aiRoutes from'./routes/aiRoutes.js'
-import quizRoutes from'./routes/quizRoutes.js'
+import aiRoutes from './routes/aiRoutes.js'
+import quizRoutes from './routes/quizRoutes.js'
 import progressRoutes from './routes/progressRoutes.js'
 
 //ES6 module __dirname alternative
@@ -26,9 +26,9 @@ connectDB();
 
 //Middleware
 app.use(cors({
-    origin: "*",
-    methods: ["GET","POST","PUT","DELETE"],
-    allowedHeaders: ["Content-Type","Authorization"],
+    origin: process.env.FRONTEND_URL || "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
 
@@ -41,10 +41,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/documents', documentRoutes)
-app.use('/api/flashcards',flashcardRoutes)
-app.use('/api/ai',aiRoutes)
-app.use('/api/quizzes',quizRoutes)
-app.use('/api/progress',progressRoutes)
+app.use('/api/flashcards', flashcardRoutes)
+app.use('/api/ai', aiRoutes)
+app.use('/api/quizzes', quizRoutes)
+app.use('/api/progress', progressRoutes)
 
 
 app.use(errorHandler);
@@ -52,18 +52,23 @@ app.use(errorHandler);
 
 //404 handler
 app.use((req, res) => {
-    res.status(404).json({ success: false, error:"Route not found",statuscode: 404 });
+    res.status(404).json({ success: false, error: "Route not found", statuscode: 404 });
 });
 
+// Export the app for Vercel serverless functions
+export default app;
 
-//start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Start server locally (only when not on Vercel)
+// Vercel sets the VERCEL environment variable, so we skip app.listen() on Vercel
+if (!process.env.VERCEL) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
 
-process.on('unhandledRejection', (err) => {
-    console.log(`Error: ${err.message}`);
-    process.exit(1);
-})
+    process.on('unhandledRejection', (err) => {
+        console.log(`Error: ${err.message}`);
+        process.exit(1);
+    });
+}
 
