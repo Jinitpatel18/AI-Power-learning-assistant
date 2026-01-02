@@ -27,7 +27,7 @@ const quizSchema = new mongoose.Schema({
             validate: [array => array.length === 4, "Must have exactly 4 options"]
         },
         correctAnswer: {
-            type: String,
+            type: Number,
             required: true
         },
         explanation: {
@@ -42,25 +42,16 @@ const quizSchema = new mongoose.Schema({
     }
     ],
     userAnswers: [
-        {
-            questionIndex: {
-                type: Number,
-                required: true
-            },
-            selectAnswer: {
-                type: String,
-                required: true
-            },
-            isCorrect: {
-                type: Boolean,
-                required: true
-            },
-            answeredAt: {
-                type: Date,
-                default: Date.now
-            }
+    {
+        questionIndex: Number,
+        selectedAnswer: Number,
+        isCorrect: Boolean,
+        answeredAt: {
+            type: Date,
+            default: Date.now
         }
-    ],
+    }
+],
     score: {
         type: Number,
         default: 0

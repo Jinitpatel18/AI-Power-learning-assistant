@@ -26,7 +26,7 @@ const documentSchema = new mongoose.Schema({
         type:String,
         default:""
     },
-    chunk: [{
+    chunks: [{
         content:{
             type:String,
             required:true

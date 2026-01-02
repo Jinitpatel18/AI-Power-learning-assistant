@@ -37,7 +37,7 @@ const protect = async(req, res, next) => {
         }
     }
     if(!token){
-        return req.status(401).json({
+        return res.status(401).json({
             success:false,
             error:"Not authorized, no token",
             statuscode:401

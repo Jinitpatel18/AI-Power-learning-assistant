@@ -1,5 +1,6 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import "tailwindcss";
 
 @theme {
   --font-display: "Urbanist", sans-serif;
@@ -7,12 +8,12 @@
   --color-primary: #FF9324;
 }
 
-@layer base{
-  html{
+@layer base {
+  html {
     font-family: var(--font-display);
   }
 
-  body{
+  body {
     background-color: #fcfbfc;
   }
 }

@@ -13,11 +13,11 @@ import QuizTakePage from './pages/Quizzes/QuizTakePage';
 import QuizResultPage from './pages/Quizzes/QuizResultPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { useAuth } from './context/AuthContext';
 
 
 function App() {
-  const isAuthenticated = false;
-  const loading = false;
+  const {isAuthenticated,loading} = useAuth()
 
   if (loading) {
     return (
