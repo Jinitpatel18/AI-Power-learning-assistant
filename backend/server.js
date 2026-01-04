@@ -66,16 +66,16 @@ app.use(cors({
 
 // Handle preflight requests
 // app.options('*', cors());
-app.use((req, res, next) => {
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-        res.header('Access-Control-Allow-Credentials', 'true');
-        return res.status(204).send();
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     if (req.method === 'OPTIONS') {
+//         res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+//         res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+//         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//         res.header('Access-Control-Allow-Credentials', 'true');
+//         return res.status(204).send();
+//     }
+//     next();
+// });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
