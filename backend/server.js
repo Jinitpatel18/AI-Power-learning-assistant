@@ -41,18 +41,36 @@ app.use(async (req, res, next) => {
     next();
 });
 
-//Middleware
+//Middleware - CORS
+const allowedOrigins = [
+    'https://ai-power-learning-assistant.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000'
+];
+
 app.use(cors({
-    origin: '*',
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, true); // For now, allow all (change to false in production)
+        }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
 
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Add this BEFORE the 404 handler (around line 68)
+// Root route
 app.get('/', (req, res) => {
     res.json({
         success: true,
@@ -70,10 +88,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// Keep your 404 handler below this
-app.use((req, res) => {
-    res.status(404).json({ success: false, error: "Route not found", statuscode: 404 });
-});
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
@@ -83,35 +97,37 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// static folder for uploads (only if directory exists, for serverless compatibility)
+// Static folder for uploads (only if directory exists, for serverless compatibility)
 try {
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 } catch (error) {
     console.warn('Uploads directory not available:', error.message);
 }
 
-//Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/documents', documentRoutes)
-app.use('/api/flashcards', flashcardRoutes)
-app.use('/api/ai', aiRoutes)
-app.use('/api/quizzes', quizRoutes)
-app.use('/api/progress', progressRoutes)
+// Routes - THESE MUST COME BEFORE 404 HANDLER
+app.use('/api/auth', authRoutes);
+app.use('/api/documents', documentRoutes);
+app.use('/api/flashcards', flashcardRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/progress', progressRoutes);
 
-
+// Error handler middleware
 app.use(errorHandler);
 
-
-//404 handler
+// 404 handler - MUST BE LAST
 app.use((req, res) => {
-    res.status(404).json({ success: false, error: "Route not found", statuscode: 404 });
+    res.status(404).json({
+        success: false,
+        error: "Route not found",
+        statuscode: 404
+    });
 });
 
 // Export the app for Vercel serverless functions
 export default app;
 
 // Start server locally (only when not on Vercel)
-// Vercel sets the VERCEL environment variable, so we skip app.listen() on Vercel
 if (!process.env.VERCEL && !process.env.VERCEL_ENV) {
     // Connect DB immediately for local development
     connectDB().catch(err => {
@@ -128,4 +144,3 @@ if (!process.env.VERCEL && !process.env.VERCEL_ENV) {
         process.exit(1);
     });
 }
-
