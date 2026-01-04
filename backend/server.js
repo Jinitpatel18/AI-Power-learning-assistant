@@ -65,7 +65,7 @@ app.use(cors({
 }));
 
 // Handle preflight requests
-// app.options('*', cors());
+app.options('*', cors());
 // app.use((req, res, next) => {
 //     if (req.method === 'OPTIONS') {
 //         res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
