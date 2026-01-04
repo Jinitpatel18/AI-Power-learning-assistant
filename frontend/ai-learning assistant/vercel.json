@@ -3,14 +3,14 @@
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
     "installCommand": "npm install",
-    "routes": [
+    "rewrites": [
         {
-            "src": "^/api/(.*)",
-            "dest": "https://ai-power-learning-assistant-server.vercel.app/api/$1"
+            "source": "/api/:path*",
+            "destination": "https://ai-power-learning-assistant-server.vercel.app/api/:path*"
         },
         {
-            "src": "^(?!/api/).*",
-            "dest": "/index.html"
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ]
 }
