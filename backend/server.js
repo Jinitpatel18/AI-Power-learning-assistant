@@ -60,7 +60,7 @@ app.get('/api/health', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
-
+b     
 // static folder for uploads (only if directory exists, for serverless compatibility)
 try {
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
