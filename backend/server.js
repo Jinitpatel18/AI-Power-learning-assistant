@@ -43,29 +43,29 @@ app.use(async (req, res, next) => {
 
 //Middleware - CORS
 const allowedOrigins = [
-    'https://ai-power-learning-assistant.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
+    "https://ai-power-learning-assistant.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000"
 ];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (mobile apps, Postman, etc.)
+        // allow Postman / server-to-server
         if (!origin) return callback(null, true);
 
         if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(null, true); // For now, allow all (change to false in production)
+            return callback(null, true);
         }
+
+        return callback(new Error("Not allowed by CORS"));
     },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // Handle preflight requests
-app.options('/*', cors());
+// app.options('/*', cors());
 // app.use((req, res, next) => {
 //     if (req.method === 'OPTIONS') {
 //         res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
