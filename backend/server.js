@@ -52,6 +52,28 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Add this BEFORE the 404 handler (around line 68)
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'AI Power Learning Assistant API',
+        version: '1.0.0',
+        endpoints: {
+            health: '/api/health',
+            auth: '/api/auth',
+            documents: '/api/documents',
+            flashcards: '/api/flashcards',
+            ai: '/api/ai',
+            quizzes: '/api/quizzes',
+            progress: '/api/progress'
+        }
+    });
+});
+
+// Keep your 404 handler below this
+app.use((req, res) => {
+    res.status(404).json({ success: false, error: "Route not found", statuscode: 404 });
+});
 // Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
