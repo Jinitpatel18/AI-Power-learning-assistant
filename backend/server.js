@@ -43,9 +43,7 @@ app.use(async (req, res, next) => {
 
 //Middleware
 app.use(cors({
-    origin: ['https://ai-power-learning-assistant.vercel.app',
-        'http://localhost:5173',
-        'http://localhost:3000'],
+    origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
