@@ -1,7 +1,9 @@
 # Copy this file to .env and fill in your values
 
 # Backend API URL
-# For local development: http://localhost:5000
+# For local development: http://localhost:3000
 # For production: your_backend_deployment_url (e.g., https://your-backend.vercel.app)
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:3000
+
+
 

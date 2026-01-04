@@ -30,7 +30,7 @@
 //             })
 //         }
 
-//         const PORT = process.env.PORT || 5000;
+//         const PORT = process.env.PORT || 3000;
 //         const baseUrl = `http://localhost:${PORT}`;
 //         const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`
 
@@ -245,7 +245,7 @@ export const uploadDocument = async (req, res, next) => {
             })
         }
 
-        const PORT = process.env.PORT || 5000;
+        const PORT = process.env.PORT || 3000;
         const baseUrl = `http://localhost:${PORT}`;
         const fileUrl = `${baseUrl}/uploads/documents/${req.file.filename}`
 

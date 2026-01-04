@@ -22,7 +22,6 @@
 //     }
 // };
 import fs from "fs";
-import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 /**
  * Extract text from PDF file
@@ -31,42 +30,23 @@ import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
  */
 export const extractTextFromPDF = async (filePath) => {
     try {
+        // Dynamic import for CommonJS module
+        const pdfParse = (await import("pdf-parse")).default;
+        
         const dataBuffer = fs.readFileSync(filePath);
         
-        // Convert Buffer to Uint8Array (required by pdfjs-dist)
-        const uint8Array = new Uint8Array(dataBuffer);
+        // Parse PDF using pdf-parse
+        const data = await pdfParse(dataBuffer);
         
-        // Load the PDF document
-        const loadingTask = getDocument({
-            data: uint8Array,
-            verbosity: 0 // Suppress warnings
-        });
-        
-        const pdfDocument = await loadingTask.promise;
-        
-        // Extract text from all pages
-        let fullText = "";
-        for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
-            const page = await pdfDocument.getPage(pageNum);
-            const textContent = await page.getTextContent();
-            
-            // Join text items properly - sometimes they come as individual characters
-            const pageText = textContent.items
-                .map(item => item.str)
-                .join(""); // Use empty string instead of space
-            
-            fullText += pageText + "\n\n";
-        }
-
         // Clean up the extracted text
-        const cleanedText = fullText
+        const cleanedText = data.text
             .replace(/\s+/g, ' ')  // Replace multiple spaces with single space
             .trim();
 
         return {
             text: cleanedText,
-            numPages: pdfDocument.numPages,
-            info: {}
+            numPages: data.numpages,
+            info: data.info || {}
         };
     } catch (error) {
         console.error("PDF Parsing error:", error);
